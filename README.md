@@ -4,7 +4,9 @@
 >
 > Escribe tu peso y cuánto saltas: un astronauta repite ese salto en los ocho planetas, la Luna y Plutón, con la física real de cada gravedad.
 
-![gravity-check preview](docs/preview.png)
+**[Live demo · Demo en vivo →](https://diegocedenno.github.io/gravity-check/)**
+
+[![gravity-check preview](docs/preview.png)](https://diegocedenno.github.io/gravity-check/)
 
 **[English](#english)** · **[Español](#español)**
 
