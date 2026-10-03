@@ -12,8 +12,8 @@
   var DEFAULT_HINT = "peso de 1 a 300 kg · salto de 5 a 150 cm";
 
   var FIELDS = {
-    mass: { input: document.getElementById("mass"), limit: LIMITS.mass, noun: "el peso", unit: "kg" },
-    jump: { input: document.getElementById("jump"), limit: LIMITS.jump, noun: "el salto", unit: "cm" },
+    mass: { input: document.getElementById("mass"), limit: LIMITS.mass, label: "peso", noun: "el peso", unit: "kg" },
+    jump: { input: document.getElementById("jump"), limit: LIMITS.jump, label: "salto", noun: "el salto", unit: "cm" },
   };
 
   var els = {
@@ -241,7 +241,7 @@
     if (!result.ok) render(false);
     refreshErrors();
     if (adjusted && !invalid.mass && !invalid.jump) {
-      setHint(field.noun + " ajustado a " + physics.fmtShort(state[name]) + " " + field.unit, false);
+      setHint(field.label + " ajustado a " + physics.fmtShort(state[name]) + " " + field.unit, false);
     }
   }
 
