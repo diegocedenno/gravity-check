@@ -21,6 +21,7 @@
 - The strip below shows all ten worlds on one common scale, every astronaut jumping at the pace of its own gravity. Pick a world there — click, tap or arrow keys — to bring it to the main scene.
 - `saltar a la vez` makes all ten take off together, so you can watch Jupiter land several times before Pluto comes down once.
 - Your data and the chosen world survive a reload (`localStorage`).
+- A switch in the header flips between dark and light mode: the same sky redrawn as a star chart on paper, with the white suit held by an ink outline. The choice is remembered and shared across the Plutón series.
 
 ### What makes it technically interesting
 
@@ -75,6 +76,7 @@ It also works as-is on GitHub Pages.
 - La tira de abajo muestra los diez mundos a una misma escala, cada astronauta saltando al ritmo de su gravedad. Elige un mundo ahí —con clic, dedo o flechas— para llevarlo a la escena principal.
 - `saltar a la vez` hace que los diez despeguen juntos: Júpiter aterriza varias veces antes de que Plutón baje una.
 - Tus datos y el mundo elegido sobreviven a una recarga (`localStorage`).
+- Un interruptor en la cabecera alterna entre modo oscuro y claro: el mismo cielo redibujado como carta estelar sobre papel, con el traje blanco sostenido por un contorno de tinta. La elección se recuerda y se comparte entre los proyectos de la serie Plutón.
 
 ### Qué lo hace interesante técnicamente
 
