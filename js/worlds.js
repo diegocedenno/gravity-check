@@ -99,6 +99,8 @@
     var inner = node("g", { "clip-path": "url(#gc-disc)" }, parent);
     FEATURES[world.id](inner, look);
     node("circle", { cx: 60, cy: 60, r: 52, fill: "url(#gc-light)" }, inner);
+    // Filo del disco: invisible en oscuro; en claro sostiene a los mundos pálidos sobre el papel.
+    node("circle", { class: "globe-rim", cx: 60, cy: 60, r: 52 }, parent);
   }
 
   // Disco del mundo. Devuelve { el, size, lift }: `lift` es la fracción del lado
@@ -119,7 +121,8 @@
 
     if (world.id === "saturn") {
       // El globo se encoge para dejar sitio a los anillos: medio anillo detrás, medio delante.
-      var ring = { fill: "none", stroke: "#cfd6dd", "stroke-width": 5, opacity: 0.85 };
+      // Los anillos toman el color por clase (style.css): casi blancos, sobre papel se perderían.
+      var ring = { class: "ring-saturn", fill: "none", "stroke-width": 5, opacity: 0.85 };
       var back = node("g", { transform: "rotate(-14 60 60)" }, svg);
       ring.d = "M4 60 A56 15 0 0 1 116 60";
       node("path", ring, back);
@@ -132,7 +135,7 @@
 
     if (world.id === "uranus") {
       // Anillo fino y casi vertical: Urano rueda tumbado.
-      var thin = { fill: "none", stroke: "#e6edf3", "stroke-width": 1.6, opacity: 0.5 };
+      var thin = { class: "ring-uranus", fill: "none", "stroke-width": 1.6, opacity: 0.5 };
       thin.d = "M60 3 A10 57 0 0 0 60 117";
       node("path", thin, node("g", { transform: "rotate(12 60 60)" }, svg));
       globe(world, svg);
@@ -223,7 +226,8 @@
       patch(-0.03, depth * 0.16, geo.W * 0.085, depth * 0.36, "#fbf5ec", 0.6);
     }
 
-    node("circle", { cx: cx, cy: cy, r: R - 0.75, fill: "none", stroke: look.light, "stroke-width": 1.5, opacity: 0.5 }, layer);
+    // Filo del horizonte: el modo claro lo vuelve una línea de tinta (.ground-rim en style.css).
+    node("circle", { class: "ground-rim", cx: cx, cy: cy, r: R - 0.75, fill: "none", stroke: look.light, "stroke-width": 1.5, opacity: 0.5 }, layer);
     // El suelo se funde con el fondo hacia abajo: es un horizonte, no una caja.
     node("rect", { x: 0, y: geo.gy, width: geo.W, height: depth, fill: "url(#gc-fade)", "clip-path": "url(#gc-ground)" }, layer);
   }

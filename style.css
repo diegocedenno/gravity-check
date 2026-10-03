@@ -7,6 +7,37 @@
   overflow: hidden;
 }
 
+/* Colores propios del proyecto que no son tokens de la serie: los grises del traje,
+   el cristal del visor (oscuro en los dos temas, igual que sus luces) y lo que sobre
+   papel pide otra tinta. */
+:root {
+  --suit-pack: #aeb7c0;
+  --suit-fold: #cfd6dd;
+  --suit-glass: #161b22;
+  --suit-led-warm: #c9a27e;
+  --suit-led-cold: #58a6ff;
+  --ring: #cfd6dd;
+}
+
+:root[data-theme="light"] {
+  --suit-glass: #232a33;
+  --ring: #9a8c78;
+}
+
+/* ---------- marca ---------- */
+
+.brand-path {
+  stroke: var(--text-2);
+}
+
+.brand-suit {
+  fill: var(--text);
+}
+
+.brand-visor {
+  fill: var(--surface);
+}
+
 .layout {
   /* El alto extra de la ventana se reparte entre la escena y la tira. */
   --grow: max(0px, 100dvh - 800px);
@@ -64,7 +95,137 @@
 }
 
 .astro {
+  /* Grosor del contorno del traje: bajo el relleno, solo asoma la mitad exterior */
+  --suit-line: 2.4px;
   overflow: visible;
+}
+
+:root[data-theme="light"] .astro-shadow {
+  background: var(--text);
+}
+
+/* Traje blanco: en modo claro lo sostiene un contorno de tinta. El trazo no escala
+   con el dibujo, porque el astronauta mide de 18 a 130 px según el mundo. */
+.suit,
+.suit-pack {
+  stroke: var(--rocket-line);
+  stroke-width: var(--suit-line);
+  stroke-linejoin: round;
+  paint-order: stroke;
+  vector-effect: non-scaling-stroke;
+}
+
+.suit,
+.suit-arm {
+  fill: var(--rocket);
+}
+
+.suit-pack {
+  fill: var(--suit-pack);
+}
+
+/* En oscuro los brazos se despegan del torso con un ribete gris a escala del dibujo;
+   en claro ese papel lo hace el mismo contorno de tinta. */
+.suit-arm {
+  stroke: var(--suit-pack);
+  stroke-width: 2.5px;
+  paint-order: stroke;
+}
+
+:root[data-theme="light"] .suit-arm {
+  stroke: var(--rocket-line);
+  stroke-width: var(--suit-line);
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.suit-fold {
+  fill: var(--suit-fold);
+  opacity: 0.6;
+}
+
+.suit-trim {
+  fill: var(--accent);
+}
+
+.suit-gear {
+  fill: var(--text-2);
+}
+
+.suit-wire {
+  fill: none;
+  stroke: var(--text-2);
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+}
+
+.suit-beacon {
+  fill: var(--alert);
+}
+
+.suit-glass {
+  fill: var(--suit-glass);
+}
+
+.suit-visor {
+  stroke: var(--text-2);
+  stroke-width: 1.2px;
+}
+
+.suit-led-warm {
+  fill: var(--suit-led-warm);
+}
+
+.suit-led-cold {
+  fill: var(--suit-led-cold);
+}
+
+.suit-glint {
+  fill: none;
+  stroke: var(--suit-led-cold);
+  stroke-width: 1.8px;
+  stroke-linecap: round;
+}
+
+/* ---------- mundos ---------- */
+
+/* Sombra del limbo de cada disco: se funde con el fondo en oscuro; sobre papel es
+   una sombra cálida y más leve. */
+.limb-shade {
+  stop-color: #0d1117;
+}
+
+:root[data-theme="light"] .limb-shade {
+  stop-color: #5b4330;
+  stop-opacity: 0.38;
+}
+
+/* El suelo de la escena se funde con el fondo, sea cielo o papel */
+.ground-fade {
+  stop-color: var(--bg);
+}
+
+/* Filo del horizonte: un brillo en oscuro, una línea de tinta sobre papel */
+:root[data-theme="light"] .ground-rim {
+  stroke: var(--rocket-line);
+  opacity: 0.7;
+}
+
+/* Filo de los discos: la Luna, Venus o Saturno son casi del color del papel */
+.globe-rim {
+  fill: none;
+  stroke: var(--rocket-line);
+  stroke-width: 1px;
+  stroke-opacity: 0.45;
+  vector-effect: non-scaling-stroke;
+}
+
+.ring-saturn {
+  stroke: var(--ring);
+}
+
+.ring-uranus {
+  stroke: var(--text);
 }
 
 .stage-hud {
@@ -448,6 +609,7 @@
 }
 
 .world-jumper .astro {
+  --suit-line: 1.6px;
   width: 100%;
   height: 100%;
 }
