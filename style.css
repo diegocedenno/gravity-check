@@ -1,0 +1,533 @@
+/* gravity-check — estilos propios. Los tokens y la base viven en assets/tokens.css */
+
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.layout {
+  /* El alto extra de la ventana se reparte entre la escena y la tira. */
+  --grow: max(0px, 100dvh - 800px);
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 372px);
+  grid-template-areas:
+    "stage readout"
+    "strip strip";
+  align-content: center;
+  gap: var(--s-4) var(--s-5);
+}
+
+/* ---------- escena ---------- */
+
+.stage {
+  grid-area: stage;
+  position: relative;
+  min-width: 0;
+  min-height: clamp(356px, calc(356px + var(--grow) * 0.6), 500px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.stage-view {
+  position: absolute;
+  inset: 0;
+  transition: opacity 160ms var(--ease-out);
+}
+
+.stage-view.is-switching {
+  opacity: 0;
+}
+
+.stage-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.astro-wrap,
+.astro-shadow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+
+.astro-shadow {
+  border-radius: 50%;
+  background: var(--bg);
+  opacity: 0.5;
+}
+
+.astro {
+  overflow: visible;
+}
+
+.stage-hud {
+  position: absolute;
+  top: var(--s-3);
+  margin: 0;
+  pointer-events: none;
+}
+
+.stage-hud--left {
+  left: var(--s-4);
+}
+
+.stage-hud--right {
+  right: var(--s-4);
+}
+
+.ruler-axis {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+
+.ruler-zero,
+.ruler-path,
+.ruler-earth,
+.ruler-apex {
+  stroke-width: 1.25;
+  stroke-dasharray: 2 6;
+  stroke-linecap: round;
+}
+
+.ruler-zero,
+.ruler-path {
+  stroke: var(--border-strong);
+}
+
+.ruler-earth {
+  stroke: var(--cold);
+  opacity: 0.75;
+}
+
+.ruler-apex {
+  stroke: var(--accent);
+}
+
+.ruler-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  fill: var(--text-2);
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.ruler-earth-text {
+  fill: var(--cold);
+}
+
+.ruler-apex-text {
+  font-size: 12px;
+  font-weight: 500;
+  fill: var(--accent);
+}
+
+/* ---------- panel de datos ---------- */
+
+.readout {
+  grid-area: readout;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-4);
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-3);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.field-label {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.field-box {
+  position: relative;
+  display: block;
+}
+
+.field input {
+  width: 100%;
+  height: 44px;
+  padding: 0 44px 0 var(--s-3);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: var(--fs-lg);
+  font-variant-numeric: tabular-nums;
+  appearance: textfield;
+  -moz-appearance: textfield;
+  transition: border-color var(--t-fast) var(--ease-out);
+}
+
+/* Las flechas del teclado siguen funcionando; los botones nativos taparían la unidad. */
+.field input::-webkit-inner-spin-button,
+.field input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.field input:hover {
+  border-color: var(--border-strong);
+}
+
+.field input:focus-visible {
+  outline-offset: 1px;
+  border-radius: var(--radius);
+}
+
+.field input[aria-invalid="true"] {
+  border-color: var(--alert);
+}
+
+.field-unit {
+  position: absolute;
+  top: 50%;
+  right: var(--s-3);
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+  pointer-events: none;
+}
+
+.hint {
+  margin-top: calc(var(--s-1) * -1);
+}
+
+.console.is-error,
+.console.is-error b {
+  color: var(--alert);
+}
+
+.readout-world {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+}
+
+.readout-world h2 {
+  font-size: 1.375rem;
+}
+
+.readout-tag {
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+
+.readout-disc {
+  flex: none;
+  width: 40px;
+  height: 40px;
+}
+
+.readout-disc svg,
+.readout-disc img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Si el panel crece con la ventana, el aire extra se reparte entre las filas */
+.telemetry {
+  flex: 1;
+  display: grid;
+  grid-auto-rows: 1fr;
+  margin: 0;
+}
+
+.telemetry > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: 3px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.telemetry > div:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.telemetry dt {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.telemetry dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-md);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.telemetry dd b {
+  font-weight: 500;
+}
+
+.telemetry dd span {
+  margin-left: var(--s-1);
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+
+.telemetry dd span::before {
+  content: "· ";
+}
+
+/* ---------- tira comparativa ---------- */
+
+.strip {
+  grid-area: strip;
+  min-width: 0;
+}
+
+.strip-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  min-height: 28px;
+  margin-bottom: var(--s-2);
+}
+
+.strip-sync {
+  position: relative;
+  flex: none;
+  min-height: 28px;
+  padding: 0 var(--s-3);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+  transition:
+    color var(--t-fast) var(--ease-out),
+    border-color var(--t-fast) var(--ease-out);
+}
+
+.strip-sync:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Toque cómodo sin agrandar el botón a la vista */
+.strip-sync::after {
+  content: "";
+  position: absolute;
+  inset: -9px;
+}
+
+.worlds {
+  --sky-h: clamp(132px, calc(132px + var(--grow) * 0.4), 212px);
+  --astro-h: 26px;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+/* Líneas de la escala común; las coloca scene.js */
+.worlds-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.worlds-grid i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed var(--border);
+  font-style: normal;
+}
+
+.worlds-grid i.is-zero {
+  border-top: 1px solid var(--border-strong);
+}
+
+.worlds-grid span {
+  position: absolute;
+  left: 3px;
+  bottom: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  color: var(--text-2);
+}
+
+.world {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding: 0 0 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  text-align: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--t-fast) var(--ease-out),
+    border-color var(--t-fast) var(--ease-out);
+}
+
+.world:hover {
+  border-color: var(--border);
+}
+
+.world[aria-checked="true"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.world:focus-visible {
+  border-radius: var(--radius);
+}
+
+.world-sky {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: var(--sky-h);
+}
+
+/* Marca de la altura máxima de cada mundo: dos muescas a los lados del astronauta */
+.world-apex {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: calc(var(--astro-h) * 0.6154 + 20px);
+  height: 1px;
+  margin-left: calc(var(--astro-h) * -0.3077 - 10px);
+  background: linear-gradient(
+    to right,
+    var(--accent) 8px,
+    transparent 8px,
+    transparent calc(100% - 8px),
+    var(--accent) calc(100% - 8px)
+  );
+}
+
+.world-jumper {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  /* 64 × 104 es el viewBox del astronauta */
+  width: calc(var(--astro-h) * 0.6154);
+  height: var(--astro-h);
+  margin-left: calc(var(--astro-h) * -0.3077);
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+.world-jumper .astro {
+  width: 100%;
+  height: 100%;
+}
+
+.world-disc {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  height: 40px;
+}
+
+/* El disco sube lo justo para que su polo toque la línea de suelo */
+.world-disc svg,
+.world-disc img {
+  flex: none;
+  width: var(--d);
+  height: var(--d);
+  margin-top: calc(var(--d) * var(--lift) * -1);
+}
+
+.world-name {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+.world-h {
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.world-w {
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  color: var(--text-2);
+}
+
+.world[aria-checked="true"] .world-h {
+  color: var(--accent);
+}
+
+/* ---------- pantallas estrechas ---------- */
+
+@media (max-width: 860px) {
+  .page {
+    gap: var(--s-4);
+  }
+
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "stage"
+      "readout"
+      "strip";
+    align-content: start;
+    gap: var(--s-4);
+  }
+
+  .stage {
+    min-height: 0;
+    height: clamp(220px, 31dvh, 320px);
+  }
+
+  .strip-head {
+    align-items: flex-start;
+  }
+
+  .worlds {
+    --sky-h: 120px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    row-gap: var(--s-3);
+  }
+}
+
+/* En los móviles más estrechos los dos rótulos de la escena no caben enteros */
+@media (max-width: 440px) {
+  .stage-hud-key {
+    display: none;
+  }
+}

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>gravity-check — tu salto en otros mundos</title>
+  <meta name="description" content="Escribe tu peso y cuánto saltas: un astronauta lo repite en los ocho planetas, la Luna y Plutón con la física real de cada gravedad.">
+  <meta name="theme-color" content="#0d1117">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="assets/starfield.js"></script>
+  <script defer src="js/physics.js"></script>
+  <script defer src="js/worlds.js"></script>
+  <script defer src="js/scene.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <!-- Recorte y luz que comparten todos los discos de mundos -->
+  <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <clipPath id="gc-disc"><circle cx="60" cy="60" r="52"/></clipPath>
+      <radialGradient id="gc-light" cx="36%" cy="30%" r="80%">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.16"/>
+        <stop offset="0.55" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="1" stop-color="#0d1117" stop-opacity="0.5"/>
+      </radialGradient>
+    </defs>
+  </svg>
+
+  <div class="page">
+    <header class="page-head">
+      <a class="brand" href="./" aria-label="gravity-check, inicio">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="45" r="19" fill="#c9a27e"/>
+          <path d="M16 20.5V25" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-dasharray="1.2 2.2" stroke-linecap="round"/>
+          <rect x="11.6" y="11.5" width="8.8" height="7.5" rx="2.8" fill="#e6edf3"/>
+          <circle cx="16" cy="8" r="5" fill="#e6edf3"/>
+          <rect x="12.6" y="5.6" width="6.8" height="4.8" rx="2.4" fill="#161b22"/>
+        </svg>
+        gravity-check
+      </a>
+      <p class="console" id="status" role="status">status: <b>listo para saltar</b></p>
+    </header>
+
+    <main class="layout">
+      <h1 class="sr-only">gravity-check: tu peso y tu salto en diez mundos</h1>
+
+      <section class="stage" id="stage" aria-label="Escena del salto">
+        <div class="stage-view" aria-hidden="true">
+          <svg class="stage-bg" focusable="false">
+            <defs>
+              <clipPath id="gc-ground"><circle cx="0" cy="0" r="1"/></clipPath>
+              <linearGradient id="gc-fade" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#0d1117" stop-opacity="0"/>
+                <stop offset="1" stop-color="#0d1117" stop-opacity="0.72"/>
+              </linearGradient>
+            </defs>
+            <g id="ruler"></g>
+            <g id="ground"></g>
+          </svg>
+
+          <div class="astro-shadow"></div>
+          <div class="astro-wrap">
+            <!-- Origen en los pies; 101 unidades de alto equivalen a 1,80 m -->
+            <svg class="astro" id="astro" viewBox="-32 -104 64 104" focusable="false">
+              <g data-part="body">
+                <path d="M12 -64 16 -77" fill="none" stroke="#8b949e" stroke-width="1.6" stroke-linecap="round"/>
+                <circle cx="16" cy="-78" r="2.2" fill="#ff7a3d"/>
+                <rect x="-18" y="-67" width="36" height="31" rx="6" fill="#aeb7c0"/>
+
+                <g data-part="leg-l">
+                  <path d="M-6.5 -36V-20" fill="none" stroke="#f4f6f8" stroke-width="11" stroke-linecap="round"/>
+                  <g data-part="shin-l">
+                    <path d="M-6.5 -20V-6" fill="none" stroke="#f4f6f8" stroke-width="11" stroke-linecap="round"/>
+                    <g data-part="boot-l"><rect x="-13.5" y="-8" width="14" height="8" rx="3" fill="#8b949e"/></g>
+                  </g>
+                </g>
+                <g data-part="leg-r">
+                  <path d="M6.5 -36V-20" fill="none" stroke="#f4f6f8" stroke-width="11" stroke-linecap="round"/>
+                  <g data-part="shin-r">
+                    <path d="M6.5 -20V-6" fill="none" stroke="#f4f6f8" stroke-width="11" stroke-linecap="round"/>
+                    <g data-part="boot-r"><rect x="-0.5" y="-8" width="14" height="8" rx="3" fill="#8b949e"/></g>
+                  </g>
+                </g>
+
+                <rect x="-14" y="-67" width="28" height="35" rx="8" fill="#f4f6f8"/>
+                <path d="M2 -67H6C10.4 -67 14 -63.4 14 -59V-40C14 -35.6 10.4 -32 6 -32H2Z" fill="#cfd6dd" opacity="0.6"/>
+                <rect x="-14" y="-44" width="28" height="3.5" fill="#c9a27e"/>
+                <rect x="-7" y="-59" width="14" height="9" rx="2" fill="#161b22"/>
+                <circle cx="-3.4" cy="-54.5" r="1.4" fill="#c9a27e"/>
+                <circle cx="0.8" cy="-54.5" r="1.4" fill="#58a6ff"/>
+
+                <g data-part="arm-l">
+                  <path d="M-15 -60 -21 -37" fill="none" stroke="#aeb7c0" stroke-width="10.5" stroke-linecap="round"/>
+                  <path d="M-15 -60 -21 -37" fill="none" stroke="#f4f6f8" stroke-width="8" stroke-linecap="round"/>
+                  <circle cx="-21.4" cy="-35.5" r="5" fill="#c9a27e"/>
+                </g>
+                <g data-part="arm-r">
+                  <path d="M15 -60 21 -37" fill="none" stroke="#aeb7c0" stroke-width="10.5" stroke-linecap="round"/>
+                  <path d="M15 -60 21 -37" fill="none" stroke="#f4f6f8" stroke-width="8" stroke-linecap="round"/>
+                  <circle cx="21.4" cy="-35.5" r="5" fill="#c9a27e"/>
+                </g>
+
+                <rect x="-8" y="-70" width="16" height="5" rx="2.5" fill="#8b949e"/>
+                <circle cx="0" cy="-84" r="17" fill="#f4f6f8"/>
+                <rect x="-12" y="-93.5" width="24" height="18" rx="8.5" fill="#161b22" stroke="#8b949e" stroke-width="1.2"/>
+                <path d="M-7.2 -85.5A6.5 6.5 0 0 1-1.6 -90.2" fill="none" stroke="#58a6ff" stroke-width="1.8" stroke-linecap="round"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <p class="stage-hud stage-hud--left console" aria-hidden="true">t <b class="mono" id="hud-t">0,00 s</b> · y <b class="mono" id="hud-y">0,00 m</b></p>
+        <p class="stage-hud stage-hud--right console" aria-hidden="true"><span class="stage-hud-key">mundo: </span><b id="hud-world">Plutón</b></p>
+        <p class="sr-only" id="stage-desc"></p>
+      </section>
+
+      <section class="readout panel" aria-label="Tus datos y telemetría del mundo elegido">
+        <form class="fields" id="fields" novalidate>
+          <label class="field" for="mass">
+            <span class="field-label">Peso en la Tierra <span class="sr-only">en kilogramos</span></span>
+            <span class="field-box">
+              <input id="mass" name="mass" type="number" inputmode="decimal" min="1" max="300" step="any" value="70" autocomplete="off" aria-describedby="hint">
+              <span class="field-unit" aria-hidden="true">kg</span>
+            </span>
+          </label>
+          <label class="field" for="jump">
+            <span class="field-label">Salto en la Tierra <span class="sr-only">en centímetros</span></span>
+            <span class="field-box">
+              <input id="jump" name="jump" type="number" inputmode="decimal" min="5" max="150" step="any" value="50" autocomplete="off" aria-describedby="hint">
+              <span class="field-unit" aria-hidden="true">cm</span>
+            </span>
+          </label>
+        </form>
+        <p class="console hint" id="hint" aria-live="polite">peso de 1 a 300 kg · salto de 5 a 150 cm</p>
+
+        <div class="readout-world">
+          <span class="readout-disc" id="t-disc" aria-hidden="true"></span>
+          <div>
+            <h2 id="t-world">Plutón</h2>
+            <p class="readout-tag" id="t-tag">planeta enano</p>
+          </div>
+        </div>
+
+        <dl class="telemetry">
+          <div>
+            <dt>gravedad</dt>
+            <dd><b id="t-g">0,62 m/s²</b> <span id="t-ratio">0,06 g</span></dd>
+          </div>
+          <div>
+            <dt>altura del salto</dt>
+            <dd><b id="t-height">7,91 m</b> <span id="t-times">×15,8</span></dd>
+          </div>
+          <div>
+            <dt>tiempo en el aire</dt>
+            <dd><b id="t-time">10,10 s</b></dd>
+          </div>
+          <div>
+            <dt>peso</dt>
+            <dd><b id="t-weight">4,4 kgf</b> <span id="t-force">43,4 N</span></dd>
+          </div>
+        </dl>
+
+        <p class="console note">masa: <b id="t-mass">70 kg</b>, igual en todos los mundos</p>
+        <p class="sr-only" id="announce" aria-live="polite"></p>
+      </section>
+
+      <section class="strip" aria-label="Comparativa de los diez mundos">
+        <div class="strip-head">
+          <p class="console" id="strip-label">misma escala · despegue a <b id="v0">3,13 m/s</b> en los diez mundos</p>
+          <button type="button" class="strip-sync" id="sync">saltar a la vez</button>
+        </div>
+        <div class="worlds" id="worlds" role="radiogroup" aria-label="Elige un mundo">
+          <div class="worlds-grid" id="worlds-grid" aria-hidden="true"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-foot">
+      <span>gravity-check · serie Plutón</span>
+      <span>hecho por <a href="https://github.com/diegocedenno">diegocedenno</a> · MIT</span>
+    </footer>
+  </div>
+</body>
+</html>
